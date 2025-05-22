@@ -1,0 +1,16 @@
+README.md
+setup.py
+app/__init__.py
+app/main.py
+app/logic/__init__.py
+app/logic/converter.py
+app/logic/file_handler.py
+app/ui/__init__.py
+app/ui/drag_drop_list_widget.py
+app/ui/main_window.py
+app/utils/__init__.py
+file_converter_app.egg-info/PKG-INFO
+file_converter_app.egg-info/SOURCES.txt
+file_converter_app.egg-info/dependency_links.txt
+file_converter_app.egg-info/requires.txt
+file_converter_app.egg-info/top_level.txt
