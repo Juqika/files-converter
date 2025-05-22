@@ -91,4 +91,3 @@ class FileConverter:
             f"File '{input_filename}' was hypothetically converted and saved as '{output_filename}'."
         )
         self.progress_bar.setValue(0) # Reset progress bar
-```

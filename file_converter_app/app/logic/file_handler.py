@@ -130,4 +130,4 @@ class FileHandler:
 # Note: The choose_files_button is not directly accessible from FileHandler.
 # The main_window.py should connect its button to file_handler.open_file_dialog.
 # The task was to connect itemSelectionChanged, which is done in __init__.
-```
+
