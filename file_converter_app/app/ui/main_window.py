@@ -35,128 +35,130 @@ class DropGroupBox(QtWidgets.QGroupBox):
             super().dropEvent(event)
 
 class MainWindow(QtWidgets.QMainWindow):
-    DARK_STYLE = """ /* As defined in the previous response, based on the image */
-    QMainWindow {
-        background-color: #101010; 
-        font-family: "Segoe UI", Arial, sans-serif; 
-    }
-    QGroupBox {
-        background-color: rgba(40, 40, 40, 0.85); 
-        border: 1px solid rgba(70, 70, 70, 0.9); 
-        border-radius: 12px; 
-        margin-top: 1ex;
-        color: #E0E0E0; 
-        padding: 10px;
-    }
-    QGroupBox::title {
-        subcontrol-origin: margin;
-        subcontrol-position: top left;
-        left: 15px;
-        padding: 0 5px 5px 5px; 
-        color: #B0B0B0; 
-        font-size: 14px;
-        font-weight: bold;
-    }
-    QLabel {
-        color: #D0D0D0; 
-        background-color: transparent; 
-    }
-    QPushButton {
-        background-color: rgba(55, 55, 55, 0.9); 
-        color: #E0E0E0;
-        border: 1px solid rgba(85, 85, 85, 0.9);
-        padding: 10px 15px;
-        border-radius: 8px; 
-        font-size: 13px;
-        font-weight: 500; 
-    }
-    QPushButton:hover {
-        background-color: rgba(70, 70, 70, 0.95); 
-        border-color: rgba(100, 100, 100, 0.95);
-    }
-    QPushButton:pressed {
-        background-color: rgba(45, 45, 45, 0.9);
-    }
-    QPushButton#convertButton {
-        background-color: rgba(0, 122, 204, 0.9); 
-        color: white;
-        font-weight: bold;
-    }
-    QPushButton#convertButton:hover {
-        background-color: rgba(0, 100, 170, 0.95);
-    }
-    /* QPushButton#themeToggleButton styling can be removed as the button is removed */
-    QComboBox {
-        background-color: rgba(45, 45, 45, 0.9);
-        color: #E0E0E0;
-        border: 1px solid rgba(70, 70, 70, 0.9);
-        border-radius: 8px;
-        padding: 8px 10px;
-        font-size: 13px;
-    }
-    QComboBox::drop-down {
-        border: none;
-        width: 25px;
-    }
-    QComboBox QAbstractItemView {
-        background-color: #1C1C1C; 
-        color: #E0E0E0;
-        selection-background-color: rgba(0, 122, 204, 0.7); 
-        border: 1px solid #3A3A3A;
-        border-radius: 6px;
-        padding: 5px;
-    }
-    QListWidget {
-        background-color: rgba(35, 35, 35, 0.85);
-        color: #E0E0E0;
-        border: 1px solid rgba(60, 60, 60, 0.9);
-        border-radius: 10px;
-        padding: 8px;
-    }
-    QListWidget::item {
-        padding: 5px;
-        border-radius: 4px; 
-    }
-    QListWidget::item:hover {
-        background-color: rgba(70, 70, 70, 0.5);
-    }
-    QListWidget::item:selected {
-        background-color: rgba(0, 122, 204, 0.6);
-        color: white;
-    }
-    QProgressBar {
-        border: 1px solid rgba(70, 70, 70, 0.9);
-        border-radius: 8px;
-        text-align: center;
-        color: #E0E0E0;
-        background-color: rgba(45, 45, 45, 0.9);
-        font-size: 12px;
-        height: 22px; 
-    }
-    QProgressBar::chunk {
-        background-color: rgba(0, 122, 204, 0.8); 
-        border-radius: 6px;
-        margin: 1px;
-    }
-    DropGroupBox {
-        background-color: rgba(30, 30, 30, 0.8); 
-        border: 2px dashed rgba(80, 80, 80, 0.9);
-        border-radius: 12px;
-    }
-    DropGroupBox QLabel {
-        color: #A0A0A0;
-        font-size: 14px;
-        font-weight: normal;
-    }
-    * {
-        font-family: "Segoe UI", Arial, sans-serif;
-    }
-    """
+    # At the top of your MainWindow class
+    DARK_STYLE = """
+        QMainWindow {
+            background-color: #101010;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+        QGroupBox {
+            background-color: rgba(40, 40, 40, 0.85);
+            border: 1px solid rgba(70, 70, 70, 0.9);
+            border-radius: 12px;
+            margin-top: 1ex;
+            color: #E0E0E0;
+            padding: 10px;
+        }
+        QGroupBox::title {
+            subcontrol-origin: margin;
+            subcontrol-position: top left;
+            left: 15px;
+            padding: 0 5px 5px 5px;
+            color: #B0B0B0;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        QLabel {
+            color: #D0D0D0;
+            background-color: transparent;
+        }
+        QPushButton {
+            background-color: rgba(55, 55, 55, 0.9);
+            color: #E0E0E0;
+            border: 1px solid rgba(85, 85, 85, 0.9);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        QPushButton:hover {
+            background-color: rgba(70, 70, 70, 0.95);
+            border-color: rgba(100, 100, 100, 0.95);
+        }
+        QPushButton:pressed {
+            background-color: rgba(45, 45, 45, 0.9);
+        }
+        QPushButton#convertButton {
+            background-color: rgba(0, 122, 204, 0.9);
+            color: white;
+            font-weight: bold;
+        }
+        QPushButton#convertButton:hover {
+            background-color: rgba(0, 100, 170, 0.95);
+        }
+        /* QPushButton#themeToggleButton styling can be removed as the button is removed */
+        QComboBox {
+            background-color: rgba(45, 45, 45, 0.9);
+            color: #E0E0E0;
+            border: 1px solid rgba(70, 70, 70, 0.9);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 13px;
+        }
+        QComboBox::drop-down {
+            border: none;
+            width: 25px;
+        }
+        QComboBox QAbstractItemView {
+            background-color: #1C1C1C;
+            color: #E0E0E0;
+            selection-background-color: rgba(0, 122, 204, 0.7);
+            border: 1px solid #3A3A3A;
+            border-radius: 6px;
+            padding: 5px;
+        }
+        QListWidget {
+            background-color: rgba(35, 35, 35, 0.85);
+            color: #E0E0E0;
+            border: 1px solid rgba(60, 60, 60, 0.9);
+            border-radius: 10px;
+            padding: 8px;
+        }
+        QListWidget::item {
+            padding: 5px;
+            border-radius: 4px;
+        }
+        QListWidget::item:hover {
+            background-color: rgba(70, 70, 70, 0.5);
+        }
+        QListWidget::item:selected {
+            background-color: rgba(0, 122, 204, 0.6);
+            color: white;
+        }
+        QProgressBar {
+            border: 1px solid rgba(70, 70, 70, 0.9);
+            border-radius: 8px;
+            text-align: center;
+            color: #E0E0E0;
+            background-color: rgba(45, 45, 45, 0.9);
+            font-size: 12px;
+            height: 22px;
+        }
+        QProgressBar::chunk {
+            background-color: rgba(0, 122, 204, 0.8);
+            border-radius: 6px;
+            margin: 1px;
+        }
+        DropGroupBox {
+            background-color: rgba(30, 30, 30, 0.8);
+            border: 2px dashed rgba(80, 80, 80, 0.9);
+            border-radius: 12px;
+        }
+        DropGroupBox QLabel {
+            color: #A0A0A0;
+            font-size: 14px;
+            font-weight: normal;
+        }
+        * {
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+        """
 
     # LIGHT_STYLE definition removed
 
     def __init__(self):
         super().__init__()
+        self.setStyleSheet(self.DARK_STYLE)
 
         self.setWindowTitle("File Converter")
         self.resize(800, 600)
