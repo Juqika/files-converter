@@ -1,9 +1,9 @@
 -e .
 PySide6
 
-# Common conversion libraries (uncomment as needed when implementing actual conversions)
-# Pillow
-# PyPDF2
+# Common conversion libraries
+Pillow
+PyPDF2
 # python-docx
 # moviepy
 # mutagen
