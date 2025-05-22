@@ -1,3 +1,4 @@
+-e .
 PySide6
 
 # Common conversion libraries (uncomment as needed when implementing actual conversions)

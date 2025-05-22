@@ -7,7 +7,7 @@ from app.ui.main_window import MainWindow
 from app.logic.file_handler import FileHandler
 from app.logic.converter import FileConverter
 
-if __name__ == '__main__':
+def main():
     app = QApplication(sys.argv)
 
     main_win = MainWindow()
@@ -39,3 +39,6 @@ if __name__ == '__main__':
 
     main_win.show()
     sys.exit(app.exec())
+
+if __name__ == '__main__':
+    main()
