@@ -160,8 +160,8 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__()
         self.setStyleSheet(self.DARK_STYLE)
 
-        self.setWindowTitle("File Converter")
-        self.resize(800, 600)
+        self.setWindowTitle("Converter")
+        self.resize(500, 270)
         # self.current_theme = "light" # Removed, dark is default
 
         central_widget = QtWidgets.QWidget()
