@@ -49,10 +49,12 @@ class FileHandler:
             "All Files (*);;Images (*.png *.jpg *.jpeg *.bmp *.webp);;Documents (*.pdf *.docx *.txt)" 
         )
         if file_paths:
-            self.status_log.append(f"Selected {len(file_paths)} file(s).")
-            self.process_selected_files(file_paths)
+            self.status_log.append(f"Selected {len(file_paths)} file(s) via dialog.") # Modified log for clarity
+            # self.process_selected_files(file_paths) # Removed direct call
+            return file_paths # Return file_paths
         else:
-            self.status_log.append("No files selected.")
+            self.status_log.append("No files selected via dialog.") # Modified log for clarity
+            return [] # Return empty list if no files selected
 
     def process_selected_files(self, file_paths):
         for file_path in file_paths:
@@ -121,6 +123,34 @@ class FileHandler:
 
     def handle_file_list_selection_change(self):
         self.update_output_formats_for_selection()
+
+    def clear_all_files(self):
+        self.file_list_widget.clear()
+        # Reset output format combo and related UI elements as if no files are selected
+        self.update_output_formats_for_selection() 
+        self.status_log.append("File list cleared. Ready for new files.")
+
+    def remove_file_at_row(self, row_index):
+        item = self.file_list_widget.takeItem(row_index)
+        if item:
+            # Attempt to get the original file path for a more robust name, fallback to item text
+            original_path = item.data(QtCore.Qt.ItemDataRole.UserRole)
+            file_name_to_log = os.path.basename(original_path) if original_path else item.text().split(' (')[0]
+            
+            self.status_log.append(f"Removed file: {file_name_to_log}")
+            self.update_output_formats_for_selection() # Update combo box and selection state
+
+            if self.file_list_widget.count() == 0:
+                # If the list is empty, switch back to the upload view via MainWindow
+                self.main_window.show_upload_view()
+                # show_upload_view in MainWindow already calls self.file_handler.clear_all_files(),
+                # which logs "File list cleared. Ready for new files."
+                # and also calls update_output_formats_for_selection().
+                # So, no redundant logging or calls are strictly needed here,
+                # but update_output_formats_for_selection() above is fine for immediate UI consistency.
+        else:
+            self.status_log.append(f"Failed to remove file at row {row_index}.")
+
 
 # Example of how to connect the button in main_window.py (for reference, not part of this file):
 # from .logic.file_handler import FileHandler
