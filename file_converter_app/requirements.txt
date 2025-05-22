@@ -1,0 +1,9 @@
+PySide6
+
+# Common conversion libraries (uncomment as needed when implementing actual conversions)
+# Pillow
+# PyPDF2
+# python-docx
+# moviepy
+# mutagen
+# ffmpeg-python
