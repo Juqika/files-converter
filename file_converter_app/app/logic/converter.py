@@ -1,6 +1,8 @@
 import time
 import os
 from PySide6 import QtWidgets, QtCore, QtGui
+from PIL import Image
+from PyPDF2 import PdfReader, PdfWriter
 
 class FileConverter:
     def __init__(self, main_window):
@@ -61,9 +63,9 @@ class FileConverter:
         if not output_file_path.lower().endswith(f".{extension}"):
             output_file_path += f".{extension}"
             
-        self.perform_dummy_conversion(input_file_path, output_file_path, selected_output_format)
+        self.perform_conversion(input_file_path, output_file_path, selected_output_format)
 
-    def perform_dummy_conversion(self, input_file_path, output_file_path, output_format):
+    def perform_conversion(self, input_file_path, output_file_path, output_format):
         input_filename = os.path.basename(input_file_path)
         output_filename = os.path.basename(output_file_path)
 
@@ -71,23 +73,77 @@ class FileConverter:
         self.progress_bar.setValue(0)
         self.main_window.setDisabled(True) # Disable UI during conversion
 
-        for i in range(101):
-            self.progress_bar.setValue(i)
-            time.sleep(0.03)  # Simulate work being done
-            if i % 10 == 0: # Update less frequently to avoid UI lag if processEvents isn't used
-                 QtWidgets.QApplication.processEvents() # Keep UI responsive
+        try:
+            # Get file extension
+            input_ext = os.path.splitext(input_file_path)[1].lower()
+            
+            # Handle image conversions
+            if input_ext in ['.png', '.jpg', '.jpeg', '.bmp', '.webp']:
+                self.convert_image(input_file_path, output_file_path, output_format)
+            # Handle PDF conversions
+            elif input_ext == '.pdf':
+                self.convert_pdf(input_file_path, output_file_path, output_format)
+            else:
+                raise ValueError(f"Unsupported input file type: {input_ext}")
 
-        self.progress_bar.setValue(100)
-        self.main_window.setDisabled(False) # Re-enable UI
+            self.status_log.append(f"Successfully converted {input_filename} to {output_filename}.")
+            QtWidgets.QMessageBox.information(
+                self.main_window,
+                "Conversion Successful!",
+                f"File '{input_filename}' was successfully converted and saved as '{output_filename}'."
+            )
 
-        # Placeholder: In a real app, actual file writing would happen here.
-        # For now, we just pretend.
-        
-        self.status_log.append(f"Successfully converted {input_filename} to {output_filename}.")
-        
-        QtWidgets.QMessageBox.information(
-            self.main_window,
-            "Conversion Successful!",
-            f"File '{input_filename}' was hypothetically converted and saved as '{output_filename}'."
-        )
-        self.progress_bar.setValue(0) # Reset progress bar
+        except Exception as e:
+            self.status_log.append(f"Error during conversion: {str(e)}")
+            QtWidgets.QMessageBox.critical(
+                self.main_window,
+                "Conversion Error",
+                f"An error occurred during conversion: {str(e)}"
+            )
+        finally:
+            self.main_window.setDisabled(False)
+            self.progress_bar.setValue(0) # Reset progress bar
+
+    def convert_image(self, input_path, output_path, output_format):
+        try:
+            # Open the image
+            with Image.open(input_path) as img:
+                # Convert to RGB if necessary (for PNG with transparency)
+                if img.mode in ('RGBA', 'LA') and output_format.lower() in ('jpg', 'jpeg'):
+                    background = Image.new('RGB', img.size, (255, 255, 255))
+                    background.paste(img, mask=img.split()[-1])
+                    img = background
+                elif img.mode not in ('RGB', 'L'):
+                    img = img.convert('RGB')
+
+                # Handle JPEG format specifically
+                if output_format.lower() in ('jpg', 'jpeg'):
+                    # Save JPEG with quality setting
+                    img.save(output_path, format='JPEG', quality=95)
+                else:
+                    # Save other formats
+                    img.save(output_path, format=output_format.upper())
+                
+                self.progress_bar.setValue(100)
+
+        except Exception as e:
+            raise Exception(f"Image conversion failed: {str(e)}")
+
+    def convert_pdf(self, input_path, output_path, output_format):
+        try:
+            if output_format.lower() == 'pdf':
+                # PDF to PDF (optimize)
+                reader = PdfReader(input_path)
+                writer = PdfWriter()
+
+                for page in reader.pages:
+                    writer.add_page(page)
+
+                with open(output_path, 'wb') as output_file:
+                    writer.write(output_file)
+                self.progress_bar.setValue(100)
+            else:
+                raise ValueError(f"Unsupported PDF conversion to {output_format}")
+
+        except Exception as e:
+            raise Exception(f"PDF conversion failed: {str(e)}")
