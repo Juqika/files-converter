@@ -24,7 +24,7 @@ def main():
         main_win.choose_files_button.clicked.connect(file_handler.open_file_dialog)
         main_win.convert_button.clicked.connect(file_converter.start_conversion)
         main_win.uploaded_files_list.files_dropped.connect(file_handler.process_selected_files)
-        main_win.upload_group_box.files_dropped.connect(file_handler.process_selected_files)
+        # main_win.upload_group_box.files_dropped.connect(file_handler.process_selected_files) # REMOVED - Handled in MainWindow
     except AttributeError as e:
         print(f"Error connecting signals in main.py: {e}. "
               f"This indicates that 'choose_files_button' or 'convert_button' "

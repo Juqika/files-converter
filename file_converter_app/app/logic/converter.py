@@ -7,7 +7,7 @@ from PyPDF2 import PdfReader, PdfWriter
 class FileConverter:
     def __init__(self, main_window):
         self.main_window = main_window
-        self.status_log = self.main_window.status_log
+        # self.status_log = self.main_window.status_log # REMOVED
         self.progress_bar = self.main_window.progress_bar
         self.file_list_widget = self.main_window.uploaded_files_list # Matches main_window.py
         self.output_format_combo = self.main_window.output_format_combo
@@ -16,12 +16,12 @@ class FileConverter:
         selected_items = self.file_list_widget.selectedItems()
 
         if not selected_items:
-            self.status_log.append("Error: No file selected for conversion.")
+            # self.status_log.append("Error: No file selected for conversion.") # REMOVED
             QtWidgets.QMessageBox.warning(self.main_window, "Conversion Error", "Please select a file to convert.")
             return
 
         if len(selected_items) > 1:
-            self.status_log.append("Error: Please select only one file for conversion.")
+            # self.status_log.append("Error: Please select only one file for conversion.") # REMOVED
             QtWidgets.QMessageBox.warning(self.main_window, "Conversion Error", "Please select only a single file to convert.")
             return
             
@@ -29,7 +29,7 @@ class FileConverter:
         input_file_path = item.data(QtCore.Qt.ItemDataRole.UserRole) # Get stored original path
 
         if not input_file_path or not os.path.exists(input_file_path):
-            self.status_log.append(f"Error: Invalid or non-existent input file path for {item.text()}.")
+            # self.status_log.append(f"Error: Invalid or non-existent input file path for {item.text()}.") # REMOVED
             QtWidgets.QMessageBox.critical(self.main_window, "Conversion Error", f"The file {item.text()} could not be found or is invalid.")
             return
 
@@ -37,7 +37,7 @@ class FileConverter:
         
         invalid_formats = ["N/A", "--Select a single file for options--", "--No conversions available--", "--Select a file--", "--Unknown file type--", ""]
         if not selected_output_format or selected_output_format in invalid_formats :
-            self.status_log.append("Error: No output format selected or format is invalid.")
+            # self.status_log.append("Error: No output format selected or format is invalid.") # REMOVED
             QtWidgets.QMessageBox.warning(self.main_window, "Conversion Error", "Please select a valid output format.")
             return
 
@@ -56,7 +56,8 @@ class FileConverter:
         )
 
         if not output_file_path:
-            self.status_log.append("Conversion cancelled by user.")
+            # self.status_log.append("Conversion cancelled by user.") # REMOVED
+            print("Conversion cancelled by user.") # Optional: console log
             return
 
         # Ensure the output file has the correct extension if user manually changed it or removed it
@@ -69,7 +70,8 @@ class FileConverter:
         input_filename = os.path.basename(input_file_path)
         output_filename = os.path.basename(output_file_path)
 
-        self.status_log.append(f"Starting conversion of {input_filename} to {output_format.upper()}...")
+        # self.status_log.append(f"Starting conversion of {input_filename} to {output_format.upper()}...") # REMOVED
+        print(f"Starting conversion of {input_filename} to {output_format.upper()}...") # Optional: console log
         self.progress_bar.setValue(0)
         self.main_window.setDisabled(True) # Disable UI during conversion
 
@@ -84,9 +86,10 @@ class FileConverter:
             elif input_ext == '.pdf':
                 self.convert_pdf(input_file_path, output_file_path, output_format)
             else:
+                # self.status_log.append(f"Error: Unsupported input file type: {input_ext}") # REMOVED - Handled by exception below
                 raise ValueError(f"Unsupported input file type: {input_ext}")
 
-            self.status_log.append(f"Successfully converted {input_filename} to {output_filename}.")
+            # self.status_log.append(f"Successfully converted {input_filename} to {output_filename}.") # REMOVED
             QtWidgets.QMessageBox.information(
                 self.main_window,
                 "Conversion Successful!",
@@ -94,7 +97,7 @@ class FileConverter:
             )
 
         except Exception as e:
-            self.status_log.append(f"Error during conversion: {str(e)}")
+            # self.status_log.append(f"Error during conversion: {str(e)}") # REMOVED
             QtWidgets.QMessageBox.critical(
                 self.main_window,
                 "Conversion Error",
