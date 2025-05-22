@@ -1,5 +1,37 @@
 import sys
 from PySide6 import QtWidgets, QtGui, QtCore
+from app.ui.drag_drop_list_widget import DragDropListWidget
+
+class DropGroupBox(QtWidgets.QGroupBox):
+    files_dropped = QtCore.Signal(list)
+
+    def __init__(self, title, parent=None):
+        super().__init__(title, parent)
+        self.setAcceptDrops(True)
+
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.acceptProposedAction()
+        else:
+            super().dragEnterEvent(event)
+
+    def dragMoveEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.acceptProposedAction()
+        else:
+            super().dragMoveEvent(event)
+
+    def dropEvent(self, event):
+        if event.mimeData().hasUrls():
+            file_paths = []
+            for url in event.mimeData().urls():
+                if url.isLocalFile():
+                    file_paths.append(url.toLocalFile())
+            if file_paths:
+                self.files_dropped.emit(file_paths)
+            event.acceptProposedAction()
+        else:
+            super().dropEvent(event)
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -27,10 +59,10 @@ class MainWindow(QtWidgets.QMainWindow):
         subtitle_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         main_layout.addWidget(subtitle_label)
 
-        # File Upload Area
-        upload_group_box = QtWidgets.QGroupBox("Upload Files")
-        upload_group_box.setStyleSheet("QGroupBox { border: 2px dashed gray; margin-top: 1ex; } QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 3px 0 3px; }")
-        upload_layout = QtWidgets.QVBoxLayout(upload_group_box)
+        # File Upload Area with drag-and-drop support
+        self.upload_group_box = DropGroupBox("Upload Files")
+        self.upload_group_box.setStyleSheet("QGroupBox { border: 2px dashed gray; margin-top: 1ex; } QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 3px 0 3px; }")
+        upload_layout = QtWidgets.QVBoxLayout(self.upload_group_box)
 
         self.choose_files_button = QtWidgets.QPushButton("Choose Files") # Made it an attribute
         upload_layout.addWidget(self.choose_files_button)
@@ -39,10 +71,10 @@ class MainWindow(QtWidgets.QMainWindow):
         drag_drop_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         upload_layout.addWidget(drag_drop_label)
         
-        main_layout.addWidget(upload_group_box)
+        main_layout.addWidget(self.upload_group_box)
 
-        # Uploaded Files List
-        self.uploaded_files_list = QtWidgets.QListWidget()
+        # Uploaded Files List with drag-and-drop support
+        self.uploaded_files_list = DragDropListWidget()
         main_layout.addWidget(self.uploaded_files_list)
 
         # Output Format Selector

@@ -3,9 +3,9 @@ from PySide6.QtWidgets import QApplication
 
 # Relative imports based on the project structure
 # main.py is in file_converter_app/app/
-from .ui.main_window import MainWindow
-from .logic.file_handler import FileHandler
-from .logic.converter import FileConverter
+from app.ui.main_window import MainWindow
+from app.logic.file_handler import FileHandler
+from app.logic.converter import FileConverter
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
@@ -23,6 +23,8 @@ if __name__ == '__main__':
     try:
         main_win.choose_files_button.clicked.connect(file_handler.open_file_dialog)
         main_win.convert_button.clicked.connect(file_converter.start_conversion)
+        main_win.uploaded_files_list.files_dropped.connect(file_handler.process_selected_files)
+        main_win.upload_group_box.files_dropped.connect(file_handler.process_selected_files)
     except AttributeError as e:
         print(f"Error connecting signals in main.py: {e}. "
               f"This indicates that 'choose_files_button' or 'convert_button' "
